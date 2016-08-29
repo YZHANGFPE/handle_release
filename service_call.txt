@@ -1,0 +1,2 @@
+rosservice call 'microwave_handle_detection' 0
+rosservice call 'microwave_handle_detection' 1
