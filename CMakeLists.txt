@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf_conversions
   cv_bridge
+  dynamic_reconfigure
 )
 
 ## System dependencies are found with CMake's conventions

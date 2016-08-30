@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import rospy
+import dynamic_reconfigure.client
 from moveit_commander import RobotCommander, MoveGroupCommander, conversions
 from moveit_commander import PlanningSceneInterface, roscpp_initialize, roscpp_shutdown
 from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
@@ -12,6 +13,7 @@ from baxter_core_msgs.srv import (
     SolvePositionIKRequest,
 )
 from baxter_interface import CameraController, Gripper, Limb
+
 from sensor_msgs.msg import Image, Range
 import numpy as np
 import math
@@ -279,14 +281,23 @@ def ik_move_one_step(initial_pose, predict_pose, hdr, arm, target_dx = None, tar
     solution_found = ik(new_pose)
     return solution_found, new_pose
 
+def dynamic_config_callback(config):
+    rospy.loginfo("Config set to {lock_joints}".format(**config))
+
 def main():
     roscpp_initialize(sys.argv)
     rospy.init_node('handle_release', anonymous=True)
+    client = dynamic_reconfigure.client.Client(
+        "rsdk_position_w_id_joint_trajectory_action_server_both", 
+        timeout=30, 
+        config_callback=dynamic_config_callback)
     hdr = Header(stamp=rospy.Time.now(), frame_id='base')
     arm = Limb("left")
     tracker = Tracker(hdr, arm)
     rospy.on_shutdown(tracker.clean_shutdown)
+    client.update_configuration({"lock_joints": False})
     tracker.track()
+    client.update_configuration({"lock_joints": True})
      
 if __name__=='__main__':
     sys.exit(main())
