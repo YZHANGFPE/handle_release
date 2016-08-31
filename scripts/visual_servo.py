@@ -288,7 +288,7 @@ def main():
     roscpp_initialize(sys.argv)
     rospy.init_node('handle_release', anonymous=True)
     client = dynamic_reconfigure.client.Client(
-        "rsdk_position_w_id_joint_trajectory_action_server_both", 
+        "rsdk_position_w_id_joint_trajectory_action_server", 
         timeout=30, 
         config_callback=dynamic_config_callback)
     hdr = Header(stamp=rospy.Time.now(), frame_id='base')
@@ -296,7 +296,8 @@ def main():
     tracker = Tracker(hdr, arm)
     rospy.on_shutdown(tracker.clean_shutdown)
     client.update_configuration({"lock_joints": False})
-    tracker.track()
+    ik_move(hdr, arm, target_dx = 0.1)
+    # tracker.track()
     client.update_configuration({"lock_joints": True})
      
 if __name__=='__main__':

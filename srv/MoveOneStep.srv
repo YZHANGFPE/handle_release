@@ -1,0 +1,11 @@
+geometry_msgs/PoseStamped initial_pose
+geometry_msgs/PoseStamped predict_pose
+Header header
+string arm
+float64 target_dx
+float64 target_dy
+float64 target_dz
+---
+int64 solution_found
+geometry_msgs/PoseStamped  predict_pose
+

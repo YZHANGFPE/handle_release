@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  geometry_msgs
   message_generation
   tf
   tf_conversions
@@ -61,6 +62,7 @@ find_package( Eigen3 REQUIRED )
 add_service_files(
   FILES
   HandleDetection.srv
+  MoveOneStep.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -74,6 +76,7 @@ add_service_files(
 generate_messages(
   DEPENDENCIES
   std_msgs
+  geometry_msgs
 )
 
 ################################################
